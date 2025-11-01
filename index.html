@@ -280,10 +280,10 @@
         <p class="section__lead" style="margin:0 0 16px;">First 10 people get a free personalised PhaseMeal plan. Simple weekly check-ins for 6 weeks to help refine the method.</p>
 
         <!-- Replace the action URL with your form provider (Formspree/Fillout/Typeform). This example uses Formspree: -->
-        <form action="https://formspree.io/f/your-id-here" method="POST" style="display:grid; gap:10px; grid-template-columns: 1.2fr 1fr 1fr; align-items: center;">
-          <input aria-label="Your name" required name="name" placeholder="Your name" style="padding:12px 14px; border-radius:12px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); color: var(--text);" />
-          <input aria-label="Email" required type="email" name="email" placeholder="Email" style="padding:12px 14px; border-radius:12px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); color: var(--text);" />
-          <button class="btn btn--primary" type="submit">Request my plan</button>
+        <form action="mailto:info@phasemeal.com" method="POST" enctype="text/plain">
+          <input name="name" placeholder="Your name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <button type="submit">Request my plan</button>
         </form>
 
         <p style="font-size:12px; color:var(--muted); margin-top:10px;">
