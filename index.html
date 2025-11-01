@@ -1,20 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PhaseMeal — Eat in Rhythm</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PhaseMeal — Eat in rhythm</title>
+
+  <!-- SEO / Social -->
+  <meta name="description" content="PhaseMeal: a timing-based approach to eating in sync with your body's natural rhythm. Reset energy, mood, and metabolism with simple meal timing." />
+  <meta property="og:title" content="PhaseMeal — Eat in rhythm" />
+  <meta property="og:description" content="A simple, science-led plan to stabilise energy, mood, and metabolism through meal timing." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://phasemeal.com/" />
+  <meta name="theme-color" content="#0b1026" />
+
   <style>
-    body {font-family: system-ui, sans-serif; text-align:center; margin:8rem auto; color:#1a1a1a;}
-    h1 {font-size:2.5rem; margin-bottom:0.5rem;}
-    p {font-size:1.25rem; color:#444;}
-    a {display:inline-block; margin-top:2rem; text-decoration:none; background:#444; color:#fff; padding:0.75rem 1.5rem; border-radius:0.5rem;}
+    /* =========
+       THEME
+       ========= */
+    :root{
+      /* Circadian palette: midnight → dawn → daylight → dusk */
+      --bg-0: #0b1026;          /* midnight navy */
+      --bg-1: #0f1533;          /* deep indigo */
+      --accent-1: #8b5cf6;      /* violet */
+      --accent-2: #22d3ee;      /* cyan */
+      --accent-3: #f59e0b;      /* amber (sunrise) */
+      --text: #e6e8ef;          /* soft white */
+      --muted: #b9bfd3;         /* slate */
+      --card: rgba(255,255,255,0.06);
+      --stroke: rgba(255,255,255,0.12);
+      --ok: #34d399;            /* success green */
+      --warn: #fbbf24;          /* warm warning */
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.25);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(34,211,238,.25), transparent 60%),
+        radial-gradient(1000px 500px at 10% -20%, rgba(139,92,246,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1) 40%, #111635 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1120px, 92%); margin: 0 auto; }
+
+    /* = Nav = */
+    .nav{
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(8px);
+      background: linear-gradient(180deg, rgba(11,16,38,.75), rgba(11,16,38,.35));
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav__row{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .brand__logo{
+      width:36px; height:36px; border-radius: 12px;
+      background: conic-gradient(from 220deg, var(--accent-2), var(--accent-1), var(--accent-3), var(--accent-2));
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+    .brand__dot{
+      position:absolute; inset:auto 8px 8px auto;
+      width:8px; height:8px; border-radius:50%;
+      background: white; opacity:.9; box-shadow: 0 0 12px rgba(255,255,255,.8);
+    }
+    .brand__name{ font-weight:700; letter-spacing:.2px; }
+    .nav__cta{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+      color:#0b1026; font-weight:700; border: 1px solid rgba(255,255,255,.1);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* = Hero = */
+    .hero{
+      padding: 80px 0 40px;
+      position: relative; overflow: clip;
+    }
+    .hero__wrap{
+      display:grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items:center;
+    }
+    .h1{
+      font-size: clamp(36px, 7vw, 56px);
+      line-height: 1.04; margin: 6px 0 12px;
+      letter-spacing: .2px;
+    }
+    .lead{ font-size: clamp(16px, 2.2vw, 20px); color: var(--muted); }
+    .hero__cta{
+      margin-top: 20px; display:flex; gap:12px; flex-wrap: wrap;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:14px 18px; border-radius: 14px; font-weight:700; border:1px solid var(--stroke);
+      background: var(--card);
+      box-shadow: var(--shadow-soft);
+    }
+    .btn--primary{
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+      color:#0b1026; border-color: transparent;
+    }
+    .trust{ margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+    .hero__card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .meter{
+      background: rgba(255,255,255,.06); border-radius: 12px; padding: 14px;
+      display:grid; grid-template-columns: 1fr 1fr; gap:12px;
+    }
+    .meter__block{
+      background: rgba(255,255,255,.06); border:1px solid var(--stroke);
+      border-radius: 12px; padding: 14px;
+    }
+    .meter h4{ margin: 0 0 6px; font-size: 14px; color: var(--muted); }
+    .bar{ height:10px; border-radius: 999px; background: rgba(255,255,255,.08); overflow:hidden; }
+    .bar > span{ display:block; height:100%; background: linear-gradient(90deg, var(--accent-2), var(--accent-1)); width: 65%; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:12px; padding:8px 10px; border-radius:999px;
+      border:1px solid var(--stroke); background: rgba(255,255,255,.05);
+    }
+    .pill--ok{ border-color: rgba(52,211,153,.35); }
+    .pill--warn{ border-color: rgba(245,158,11,.35); }
+
+    /* = Sections = */
+    section{ padding: 56px 0; }
+    .section__title{ font-size: 28px; margin: 0 0 10px; }
+    .section__lead{ color: var(--muted); margin: 0 0 30px; }
+
+    .grid{
+      display:grid; gap: 16px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .card{
+      background: var(--card); border:1px solid var(--stroke);
+      border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-soft);
+    }
+    .card h3{ margin: 0 0 6px; font-size: 18px; }
+    .card p{ margin: 0; color: var(--muted); }
+
+    /* = CTA = */
+    .cta{
+      background: linear-gradient(135deg, rgba(34,211,238,.2), rgba(139,92,246,.18));
+      border:1px solid var(--stroke); border-radius: calc(var(--radius) + 6px);
+      padding: 24px; box-shadow: var(--shadow);
+    }
+
+    /* = Footer = */
+    footer{
+      padding: 40px 0 80px; color: var(--muted); font-size: 14px;
+      border-top: 1px solid var(--stroke); margin-top: 40px;
+    }
+
+    /* = Responsive = */
+    @media (max-width: 920px){
+      .hero__wrap{ grid-template-columns: 1fr; }
+      .col-4, .col-6{ grid-column: span 12; }
+      .nav__cta{ display:none; }
+    }
   </style>
 </head>
+
 <body>
-  <h1>PhaseMeal</h1>
-  <p>Eat in rhythm, live in balance.</p>
-  <p>A timing-based approach to nutrition and wellbeing — coming soon.</p>
-  <a href="mailto:info@phasemeal.com">Join the early access list</a>
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="container nav__row">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true"><span class="brand__dot"></span></div>
+        <div class="brand__name">PhaseMeal</div>
+      </div>
+      <a class="nav__cta" href="#join">Join the pilot →</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container hero__wrap">
+      <div>
+        <div class="pill pill--ok">Timing-first • non-restrictive</div>
+        <h1 class="h1">Eat in rhythm,<br/>live in balance.</h1>
+        <p class="lead">PhaseMeal helps you stabilise energy, mood, and metabolism by tuning <em>when</em> you eat; then gently optimises <em>what</em> you eat to keep that rhythm steady. No calorie counting. No medication. Real routine.</p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#join">Get your free pilot plan</a>
+          <a class="btn" href="#how">How it works</a>
+        </div>
+        <div class="trust">Founder pilot: first 10 plans free • simple weekly check-ins • withdraw anytime</div>
+      </div>
+
+      <div class="hero__card">
+        <div class="meter" aria-label="Example progress cards">
+          <div class="meter__block">
+            <h4>Energy stability</h4>
+            <div class="bar" aria-hidden="true"><span style="width:78%"></span></div>
+            <div class="pill pill--ok" style="margin-top:10px;">Week 3: ↑ steady</div>
+          </div>
+          <div class="meter__block">
+            <h4>Craving frequency</h4>
+            <div class="bar" aria-hidden="true"><span style="width:62%; background: linear-gradient(90deg, var(--ok), var(--accent-2));"></span></div>
+            <div class="pill pill--warn" style="margin-top:10px;">Week 3: ↓ fewer spikes</div>
+          </div>
+        </div>
+        <div style="margin-top:14px; font-size:13px; color:var(--muted);">
+          Your plan focuses on rhythm first (meal spacing & cut-off time), then light composition cues to keep the cycle smooth.
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Benefits -->
+  <section>
+    <div class="container">
+      <h2 class="section__title">Why it works</h2>
+      <p class="section__lead">Your body runs on cycles. When meals sync with those cycles, stress drops, sleep improves, and weight trends move the right way—without obsessive tracking.</p>
+
+      <div class="grid">
+        <div class="col-4 card">
+          <h3>Timing first</h3>
+          <p>3–4.5–6 hour spacing windows train a predictable rhythm. Finish 2–3 hours before sleep to let recovery do its thing.</p>
+        </div>
+        <div class="col-4 card">
+          <h3>Gentle composition</h3>
+          <p>What you eat supports the rhythm: protein + complex carbs earlier; lighter, calmer meals later.</p>
+        </div>
+        <div class="col-4 card">
+          <h3>Measurable calm</h3>
+          <p>Weekly check-ins on energy, cravings, sleep, and mood. Track change without gadgets.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="container">
+      <h2 class="section__title">How it works</h2>
+      <div class="grid">
+        <div class="col-6 card">
+          <h3>1) Short questionnaire</h3>
+          <p>Tell us your wake time, typical meal pattern, evening appetite, and sleep quality. We map your rhythm type.</p>
+        </div>
+        <div class="col-6 card">
+          <h3>2) Personal plan</h3>
+          <p>You get a 6-week, timing-first plan: your meal windows, daily cut-off, hydration cues, and two simple composition tips.</p>
+        </div>
+        <div class="col-6 card">
+          <h3>3) Weekly check-in</h3>
+          <p>Rate energy, mood, cravings, and sleep (1–5). We adjust your windows if needed—no calorie counting.</p>
+        </div>
+        <div class="col-6 card">
+          <h3>4) Sustain</h3>
+          <p>Once your rhythm holds, you can coast with light reminders or seasonal resets. The goal is independence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pilot CTA -->
+  <section id="join">
+    <div class="container">
+      <div class="cta">
+        <h2 class="section__title" style="margin:0 0 6px;">Join the founder pilot</h2>
+        <p class="section__lead" style="margin:0 0 16px;">First 10 people get a free personalised PhaseMeal plan. Simple weekly check-ins for 6 weeks to help refine the method.</p>
+
+        <!-- Replace the action URL with your form provider (Formspree/Fillout/Typeform). This example uses Formspree: -->
+        <form action="https://formspree.io/f/your-id-here" method="POST" style="display:grid; gap:10px; grid-template-columns: 1.2fr 1fr 1fr; align-items: center;">
+          <input aria-label="Your name" required name="name" placeholder="Your name" style="padding:12px 14px; border-radius:12px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); color: var(--text);" />
+          <input aria-label="Email" required type="email" name="email" placeholder="Email" style="padding:12px 14px; border-radius:12px; border:1px solid var(--stroke); background: rgba(255,255,255,.06); color: var(--text);" />
+          <button class="btn btn--primary" type="submit">Request my plan</button>
+        </form>
+
+        <p style="font-size:12px; color:var(--muted); margin-top:10px;">
+          By requesting a plan you agree to our simple <a href="#legal" style="text-decoration:underline;">wellness disclaimer</a>. You can withdraw anytime.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Legal -->
+  <section id="legal">
+    <div class="container">
+      <div class="card">
+        <h3 style="margin-top:0;">Wellness disclaimer & privacy note</h3>
+        <p class="lead" style="font-size:14px; color:var(--muted);">
+          PhaseMeal is a lifestyle and wellbeing programme, not a medical or therapeutic intervention. It is not intended to diagnose, treat, cure, or prevent any condition. Always consult a GP or qualified professional before significant dietary changes. Information you provide is used only to create your plan and anonymous pilot insights, and can be deleted on request.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:12px; flex-wrap: wrap;">
+      <div>© <span id="y"></span> PhaseMeal. All rights reserved.</div>
+      <div><a href="#legal" style="text-decoration:underline;">Disclaimer & privacy</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // set copyright year
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
