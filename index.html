@@ -101,9 +101,16 @@
     }
     .btn{
       display:inline-flex; align-items:center; gap:10px;
-      padding:14px 18px; border-radius: 14px; font-weight:700; border:1px solid var(--stroke);
+      padding:14px 18px; border-radius: 14px; font-weight:700;
+      border:1px solid var(--stroke);
       background: var(--card);
       box-shadow: var(--shadow-soft);
+      cursor: pointer;              /* ← add this line */
+      transition: transform .15s ease, opacity .15s ease; /* optional polish */
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
     }
     .btn--primary{
       background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
